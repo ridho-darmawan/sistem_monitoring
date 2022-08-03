@@ -14,7 +14,7 @@ class CreateNotifikasiWaTable extends Migration
     public function up()
     {
         Schema::create('notifikasi_wa', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id_notifikasi');
             $table->integer('id_permohonan');
             $table->text('pesan');
             $table->enum('status_kirim',['y','t'])->comment('y = terkirim, t= belum dikirim');

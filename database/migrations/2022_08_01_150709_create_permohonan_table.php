@@ -14,7 +14,7 @@ class CreatePermohonanTable extends Migration
     public function up()
     {
         Schema::create('permohonan', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id_permohonan');
             $table->string('nama_pemohon');
             $table->string('alamat_pemohon');
             $table->string('nomor_hp_pemohon');

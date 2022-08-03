@@ -26,3 +26,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/permohonan', 'HomeController@permohonan')->name('permohonan');
 Route::post('/permohonan', 'HomeController@store_permohonan')->name('permohonan.store');
 Route::get('/permohonan_create', 'HomeController@create_permohonan')->name('permohonan.create');
+Route::get('/permohonan_detail/{id}', 'HomeController@detail_permohonan')->name('permohonan.detail');
+Route::get('/unduh_surat_kuasa', 'HomeController@unduh_surat_kuasa')->name('unduhSuratKuasa');
+Route::get('/unduh_surat_pernyataan', 'HomeController@unduh_surat_pernyataan')->name('unduhSuratPernyataan');
+Route::patch('/upload_surat_permohonan', 'HomeController@upload_surat_permohonan')->name('upload.SuratPermohonan');
