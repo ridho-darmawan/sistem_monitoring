@@ -177,8 +177,13 @@
                                                                 <a href="#uploadSuratKuasa{{$permohonan->id_permohonan}}" data-toggle="modal" data-keyboard="false" data-backdrop="static">upload surat kuasa</a>
                                                                 @include('admin.modalUploadKuasa')
                                                             @else
-                                                                <a href="#">Lihat</a> |
-                                                                <a href="#">Edit</a>
+                                                                <a href="#previewSuratKuasa" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-info">Lihat </a> |
+
+                                                                @include('admin.modalPreviewSuratKuasa')
+
+                                                                <a href="#editSuratKuasa" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-danger">Edit </a> 
+
+                                                                @include('admin.modalEditSuratKuasa')
                                                             @endif
                                                         </td>
                                                     </tr>

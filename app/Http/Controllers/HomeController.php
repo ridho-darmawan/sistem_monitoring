@@ -215,5 +215,45 @@ class HomeController extends Controller
         }
     }
 
+    public function edit_surat_kuasa(Request $request)
+    {   
+        $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
+
+        $fileKuasaLama =storage_path('app/public/surat_kuasa/'.$getDataPermohonan->surat_kuasa);
+
+         $rules = [
+            'surat_kuasa' => 'required|max:2048',
+        ];
+
+        $messages = [
+            'required'  => 'Kolom :attribute Harus Diisi.',
+            'max'       => ':attribute maksimal 2 MB.',
+            // 'mimes'       => ':attribute harus pdf',
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $surat_kuasa = $request->file('surat_kuasa');
+
+        $name_surat_kuasa = date('YmdHis').'.'.$surat_kuasa->getClientOriginalExtension();
+        
+        $destinationPath =storage_path('app/public/surat_kuasa/');
+
+        $input = [
+            'surat_kuasa'          => $name_surat_kuasa,
+        ];
+
+        $saveSuratKuasa = $getDataPermohonan->update($input);
+
+        if($saveSuratKuasa)
+        {
+            
+            $surat_kuasa->move($destinationPath,$name_surat_kuasa);
+            File::delete($fileKuasaLama);
+            Alert::success('Berhasil', 'Upload E-doc Surat Kuasa')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+    }
+
 
 }

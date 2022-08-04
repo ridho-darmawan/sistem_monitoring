@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('upload.SuratKuasa') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('upload.SuratKuasa') }}" method="POST" id="form-upload" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <table width="100%" class="table ">
