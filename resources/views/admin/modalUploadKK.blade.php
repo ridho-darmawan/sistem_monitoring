@@ -1,27 +1,27 @@
-<div class="modal fade" id="uploadSuratKuasa{{$permohonan->id_permohonan}}" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+<div class="modal fade" id="uploadKK" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Upload Surat Kuasa Pemohon</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Upload File Kartu Keluarga Baru</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('upload.SuratKuasa') }}" method="POST" id="form-upload" enctype="multipart/form-data">
+                <form action="{{ route('upload.kk') }}" method="POST" id="form-upload" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <table width="100%" class="table ">
                         
                         <tr style="background-color: rgb(145, 207, 104); ">
-                            <td class="text-center text-white">Unggah E-doc Surat Kuasa</td>  
+                            <td class="text-center text-white">Unggah E-doc Kartu Keluarga</td>  
                         </tr>
                         
                         <tr>
                             <input type="hidden" name="id_permohonan" value="{{ $permohonan->id_permohonan }}">
                             <td>
-                                <input type="file" name="surat_kuasa" id="surat_kuasa" >
-                                <div class="text-center">
+                                <input type="file" name="kk" id="kk" >
+                                 <div class="text-center">
                                     <div  id="spinner" role="status">
                                         <span class="sr-only">Loading...</span>
                                     </div>
@@ -31,7 +31,7 @@
                     </table>
                   
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali-btn">Kembali</button>
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali-btn">Kembali</button>
                         <button type="submit" class="btn btn-md btn-primary" id="simpan-btn">Simpan</button>
                     </div>
 

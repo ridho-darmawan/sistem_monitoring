@@ -174,7 +174,7 @@
                                                             @if ($permohonan->jenis_layanan == '1')
                                                                 -
                                                             @elseif($permohonan->jenis_layanan == '2' && $permohonan->surat_kuasa == null)
-                                                                <a href="#uploadSuratKuasa{{$permohonan->id_permohonan}}" data-toggle="modal" data-keyboard="false" data-backdrop="static">upload surat kuasa</a>
+                                                                <a href="#uploadSuratKuasa" data-toggle="modal" data-keyboard="false" data-backdrop="static">upload surat kuasa</a>
                                                                 @include('admin.modalUploadKuasa')
                                                             @else
                                                                 <a href="#previewSuratKuasa" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-info">Lihat </a> |
@@ -191,10 +191,17 @@
                                                         <th width="20%">File Kartu Keluarga</th>
                                                         <td>
                                                             @if ($permohonan->file_kk == null)
-                                                                <a href="">Upload Kartu Keluarga Baru</a>
-                                                            @else                                                                
-                                                                <a href="#">Lihat</a> |
-                                                                <a href="#">Edit</a>
+                                                                <a href="#uploadKK" data-toggle="modal" data-keyboard="false" data-backdrop="static">Upload Kartu Keluarga Baru</a>
+                                                                @include('admin.modalUploadKK')
+
+                                                            @else     
+                                                                <a href="#previewKK" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-info">Lihat </a> |
+
+                                                                @include('admin.modalPreviewKK')   
+
+                                                                <a href="#editKK" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-danger">Edit </a> 
+
+                                                                @include('admin.modalEditKK')
                                                             @endif
                                                         </td>
                                                     </tr>

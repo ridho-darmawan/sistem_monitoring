@@ -255,5 +255,83 @@ class HomeController extends Controller
         }
     }
 
+    public function upload_kk(Request $request)
+    {   
+        $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
+
+
+         $rules = [
+            'kk' => 'required',
+            // 'surat_pernyataan' => 'required|size:2048|mimes:pdf',
+        ];
+
+        $messages = [
+            'required' => 'Kolom :attribute Harus Diisi.',
+            // 'size'       => ':attribute maksimal 2 MB',
+            // 'mimes'       => ':attribute harus pdf',
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $kk = $request->file('kk');
+
+        $name_kk = date('YmdHis').'.'.$kk->getClientOriginalExtension();
+        
+        $destinationPath =storage_path('app/public/kk/');
+        $kk->move($destinationPath,$name_kk);
+
+        $input = [
+            'file_kk'          => $name_kk,
+        ];
+
+        $saveKK = $getDataPermohonan->update($input);
+
+        if($saveKK)
+        {
+            Alert::success('Berhasil', 'Upload E-doc Kartu Keluarga')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+    }
+
+     public function edit_kk(Request $request)
+    {   
+        $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
+
+        $fileKKLama =storage_path('app/public/kk/'.$getDataPermohonan->file_kk);
+
+         $rules = [
+            'kk' => 'required|max:2048',
+        ];
+
+        $messages = [
+            'required'  => 'Kolom :attribute Harus Diisi.',
+            'max'       => ':attribute maksimal 2 MB.',
+            // 'mimes'       => ':attribute harus pdf',
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $kk = $request->file('kk');
+
+        $name_kk = date('YmdHis').'.'.$kk->getClientOriginalExtension();
+        
+        $destinationPath =storage_path('app/public/kk/');
+
+        $input = [
+            'file_kk'          => $name_kk,
+        ];
+
+        $saveKK = $getDataPermohonan->update($input);
+
+        if($saveKK)
+        {
+            
+            $kk->move($destinationPath,$name_kk);
+            File::delete($fileKKLama);
+            Alert::success('Berhasil', 'Upload E-doc Kartu Keluarga')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+    }
+
 
 }
