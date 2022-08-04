@@ -73,17 +73,18 @@
                         
                         <td>
                           @if ($permohonan->surat_permohonan != null)
-                              {{ $permohonan->surat_permohonan }}
+                            <a href="{{ route('unduhSuratPernyataan',$permohonan->id_permohonan) }}"><i class="fa fa-download"></i> Unduh Surat Permohonan</a>
+                          
                           @else
-                           <a href="{{ route('unduhSuratPernyataan') }}" class="badge badge-info">Unduh template Surat Pernyataan </a>
+                           <a href="{{ route('unduhTemplateSuratPernyataan') }}" class="badge badge-info">Unduh template Surat Pernyataan </a>
                           @endif
                         </td>
                         <td>
 
                           @if ($permohonan->jenis_layanan == '2' && $permohonan->surat_kuasa == null)
-                              <a href="{{ route('unduhSuratKuasa') }}" class="badge badge-info">Unduh template Surat Kuasa </a>
+                              <a href="{{ route('unduhTemplateSuratKuasa') }}" class="badge badge-info">Unduh template Surat Kuasa </a>
                           @elseif ($permohonan->jenis_layanan == '2' && $permohonan->surat_kuasa != null)
-                            {{ $permohonan->surat_kuasa }}
+                           <a href="{{ route('unduhSuratKuasa',$permohonan->id_permohonan) }}"><i class="fa fa-download"></i> Unduh Surat Kuasa</a>
                           @else
                               -
                           @endif

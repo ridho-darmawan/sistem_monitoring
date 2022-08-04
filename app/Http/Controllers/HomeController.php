@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Permohonan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -79,11 +80,12 @@ class HomeController extends Controller
 
     public function detail_permohonan($id)
     {
+        
         $permohonan = Permohonan::where('id_permohonan',$id)->first();
         return view('admin.detail_permohonan', ['permohonan' => $permohonan ]);
     }
 
-    public function unduh_surat_kuasa()
+    public function unduh_template_surat_kuasa()
     {
         $filename = 'SURAT KUASA.doc';
         $path = Storage::disk('public')->path($filename);
@@ -91,10 +93,30 @@ class HomeController extends Controller
         
     }
 
-    public function unduh_surat_pernyataan()
+    public function unduh_template_surat_pernyataan()
     {
         $filename = 'SURAT PERNYATAAN.docx';
         $path = Storage::disk('public')->path($filename);
+        return response()->download($path);
+        
+    }
+
+    public function unduh_surat_pernyataan($id)
+    {
+        $getFileSuratPernyataan = Permohonan::findOrFail($id);
+
+        $filename = $getFileSuratPernyataan->surat_permohonan;
+        $path = Storage::disk('public')->path('surat_pernyataan/'.$filename);
+        return response()->download($path);
+        
+    }
+
+    public function unduh_surat_kuasa($id)
+    {
+        $getFileSuratKuasa = Permohonan::findOrFail($id);
+
+        $filename = $getFileSuratKuasa->surat_kuasa;
+        $path = Storage::disk('public')->path('surat_kuasa/'.$filename);
         return response()->download($path);
         
     }
@@ -293,13 +315,13 @@ class HomeController extends Controller
         }
     }
 
-     public function edit_kk(Request $request)
+    public function edit_kk(Request $request)
     {   
         $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
 
         $fileKKLama =storage_path('app/public/kk/'.$getDataPermohonan->file_kk);
 
-         $rules = [
+        $rules = [
             'kk' => 'required|max:2048',
         ];
 
@@ -331,6 +353,47 @@ class HomeController extends Controller
             Alert::success('Berhasil', 'Upload E-doc Kartu Keluarga')->persistent('OK')->autoClose(3000);
             return redirect()->route('permohonan');
         }
+    }
+
+    public function cekNomorPerkara(Request $request)
+    {
+        
+        $nomorPerkara = $request->nomorPerkara;
+        $dataPerkara = DB::table('sipp.perkara')->where('nomor_perkara',$nomorPerkara)->first();
+
+        return response()->json(['success'=>'200', 'data' => $dataPerkara]);
+               
+    }
+
+    public function inputNomorPerkara(Request $request)
+    {
+        $rules = [
+            'tahun' => 'required',
+            'nomor' => 'required',
+        ];
+
+        $messages = [
+            'required'  => 'Kolom :attribute Harus Diisi.'
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $getDataPermohonan = Permohonan::findOrFail($request->id_permohonan);
+        $nomorPerkara = $request->nomor .'/Pdt.G/'.$request->tahun.'/PA.Tbh';
+
+        $input = [
+            'nomor_perkara_permohonan' => $nomorPerkara
+        ];
+
+        $saveNomorPerkara = $getDataPermohonan->update($input);
+
+        if($saveNomorPerkara)
+        {
+            Alert::success('Berhasil', 'Input Nomor Perkara')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+
+
     }
 
 

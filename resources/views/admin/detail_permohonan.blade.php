@@ -35,10 +35,17 @@
                         </div>
 
                         <div class="card-body">
+
+                            <a href="#tambahNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                <i class="fa fa-plus"></i>
+                                Tambah Nomor Perkara
+                            </a>
+                            @include('admin.modalTambahNomorPerkara')
+                           
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Nomor Perkaraa</th>
+                                        <th>Nomor Perkara</th>
                                         <th>Pemohon</th>
                                         <th>Termohon</th>
                                         <th>Jenis Layanan</th>

@@ -6,6 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sistem Monitoring</title>
 
@@ -167,12 +168,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
@@ -196,6 +197,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
           $("#kembali-btn").css('pointer-events', 'none');
 
       });
+
+      $("#cari-nomor-perkara").click(function(event){  
+          event.preventDefault();
+					var nomor = $("#nomor").val();
+					var tahun = $("#tahun").val();
+          var nomorPerkara = nomor + '/Pdt.G'  + '/' + tahun + '/PA.Tbh';
+
+          console.log('full nomor perkara : ', nomorPerkara);
+          let _token   = $('meta[name="csrf-token"]').attr('content');
+					
+            if(nomor == ''){
+                //loading();
+                swal({
+                    title: 'Maaf!',
+                    text: "Nomor tidak boleh kosong",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6'
+                })
+                $("#nomor").select();
+                
+            } else {
+
+                $.ajax({
+                    url   : "{{ URL::to('cekNomorPerkara') }}",
+                    type:"POST",
+                    
+                    data:{
+                        nomorPerkara:nomorPerkara,
+                        _token: _token
+                    },
+                    success:function(response){
+                        console.log(response.data);
+                    if (response.data != null) {
+                        document.getElementById("detail_perkara").innerHTML ='<table><tr><td>Nama Pemohon</td><td>:</td><td>'+response.data.pihak1_text+'</td></tr><tr><td>Nama Termohon</td><td>:</td><td>'+response.data.pihak2_text+'</td></tr><tr><td>Jenis Perkara</td><td>:</td><td>'+response.data.jenis_perkara_text+'</td></tr></table>';
+                        document.getElementById("info").innerHTML='<b>*Jika data tersebut telah benar, silakan klik tombol Simpan.</b>';
+
+                        $("#simpan-btn").removeClass('d-none');
+
+                    } else {
+                        document.getElementById("detail_perkara").innerHTML='';
+                        document.getElementById("info").innerHTML='<b>*Data untuk Nomor Perkara Tersebut belum tersedia.</b>';
+                        $("#simpan-btn").addClass('d-none');
+                    }
+                        
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+                      
+            }
+        });
 
     });
 
