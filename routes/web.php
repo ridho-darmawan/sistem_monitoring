@@ -30,3 +30,5 @@ Route::get('/permohonan_detail/{id}', 'HomeController@detail_permohonan')->name(
 Route::get('/unduh_surat_kuasa', 'HomeController@unduh_surat_kuasa')->name('unduhSuratKuasa');
 Route::get('/unduh_surat_pernyataan', 'HomeController@unduh_surat_pernyataan')->name('unduhSuratPernyataan');
 Route::patch('/upload_surat_permohonan', 'HomeController@upload_surat_permohonan')->name('upload.SuratPermohonan');
+Route::patch('/upload_surat_kuasa', 'HomeController@upload_surat_kuasa')->name('upload.SuratKuasa');
+Route::patch('/edit_surat_permohonan', 'HomeController@edit_surat_permohonan')->name('edit.SuratPermohonan');

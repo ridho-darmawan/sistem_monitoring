@@ -153,11 +153,18 @@
                                                         <th width="20%">Surat Permohonan</th>
                                                         <td>
                                                             @if ($permohonan->surat_permohonan == null)
-                                                                <a href="#uploadSuratPermohonan{{$permohonan->id_permohonan}}" data-toggle="modal">upload surat permohonan</a>
+                                                                <a href="#uploadSuratPermohonan{{$permohonan->id_permohonan}}" data-toggle="modal" data-keyboard="false" data-backdrop="static">upload surat permohonan</a>
                                                                 @include('admin.modalUploadPermohonan')
-                                                            @else                                                                
-                                                                <a href="#">Lihat</a> |
-                                                                <a href="#">Edit</a>
+                                                            @else      
+                                                            
+                                                            <a href="#previewPermohonan" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-info">Lihat </a> |
+
+                                                             @include('admin.modalPreviewPermohonan')
+
+                                                            <a href="#editSuratPermohonan" data-toggle="modal" data-keyboard="false" data-backdrop="static" class="btn btn-sm btn-danger">Edit </a> 
+
+                                                             @include('admin.modalEditSuratPermohonan')
+
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -167,7 +174,8 @@
                                                             @if ($permohonan->jenis_layanan == '1')
                                                                 -
                                                             @elseif($permohonan->jenis_layanan == '2' && $permohonan->surat_kuasa == null)
-                                                                <a href="">upload surat kuasa</a>
+                                                                <a href="#uploadSuratKuasa{{$permohonan->id_permohonan}}" data-toggle="modal" data-keyboard="false" data-backdrop="static">upload surat kuasa</a>
+                                                                @include('admin.modalUploadKuasa')
                                                             @else
                                                                 <a href="#">Lihat</a> |
                                                                 <a href="#">Edit</a>

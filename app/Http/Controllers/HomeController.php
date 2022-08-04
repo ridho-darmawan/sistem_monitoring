@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Permohonan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -132,6 +133,84 @@ class HomeController extends Controller
         if($saveSuratPernyataan)
         {
             Alert::success('Berhasil', 'Upload E-doc Surat Pernyataan')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+    }
+
+    public function upload_surat_kuasa(Request $request)
+    {   
+        $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
+
+
+         $rules = [
+            'surat_kuasa' => 'required',
+            // 'surat_pernyataan' => 'required|size:2048|mimes:pdf',
+        ];
+
+        $messages = [
+            'required' => 'Kolom :attribute Harus Diisi.',
+            // 'size'       => ':attribute maksimal 2 MB',
+            // 'mimes'       => ':attribute harus pdf',
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $surat_kuasa = $request->file('surat_kuasa');
+
+        $name_surat_kuasa = date('YmdHis').'.'.$surat_kuasa->getClientOriginalExtension();
+        
+        $destinationPath =storage_path('app/public/surat_kuasa/');
+        $surat_kuasa->move($destinationPath,$name_surat_kuasa);
+
+        $input = [
+            'surat_kuasa'          => $name_surat_kuasa,
+        ];
+
+        $saveSuratKuasa = $getDataPermohonan->update($input);
+
+        if($saveSuratKuasa)
+        {
+            Alert::success('Berhasil', 'Upload E-doc Surat Kuasa')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+    }
+
+    public function edit_surat_permohonan(Request $request)
+    {   
+        $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
+
+         $filePermohonanLama =storage_path('app/public/surat_pernyataan/'.$getDataPermohonan->surat_permohonan);
+
+         $rules = [
+            'surat_permohonan' => 'required|max:2048',
+        ];
+
+        $messages = [
+            'required'  => 'Kolom :attribute Harus Diisi.',
+            'max'       => ':attribute maksimal 2 MB.',
+            // 'mimes'       => ':attribute harus pdf',
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $surat_permohonan = $request->file('surat_permohonan');
+
+        $name_surat_permohonan = date('YmdHis').'.'.$surat_permohonan->getClientOriginalExtension();
+        
+        $destinationPath =storage_path('app/public/surat_pernyataan/');
+
+        $input = [
+            'surat_permohonan'          => $name_surat_permohonan,
+        ];
+
+        $saveSuratPermohonan = $getDataPermohonan->update($input);
+
+        if($saveSuratPermohonan)
+        {
+            
+            $surat_permohonan->move($destinationPath,$name_surat_permohonan);
+            File::delete($filePermohonanLama);
+            Alert::success('Berhasil', 'Upload E-doc Surat Permohonan')->persistent('OK')->autoClose(3000);
             return redirect()->route('permohonan');
         }
     }

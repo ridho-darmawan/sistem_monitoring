@@ -64,7 +64,8 @@
                     @endphp
 
                     @forelse ($permohonans as $permohonan)
-                        <td>{{ $no++ }}</td>
+                    <tr>
+                       <td>{{ $no++ }}</td>
                         <td>{{ $permohonan->nama_pemohon }}</td>
                         <td>{{ $permohonan->alamat_pemohon }}</td>
                         <td>{{ $permohonan->nomor_hp_pemohon }}</td>
@@ -89,6 +90,8 @@
                            
                         </td>
                         <td><a href="{{ route('permohonan.detail',$permohonan->id_permohonan) }}">Detail</a></td>
+                    </tr>
+                       
                     @empty
                         <td colspan="6">Data Belum ditemukan</td>
                     @endforelse

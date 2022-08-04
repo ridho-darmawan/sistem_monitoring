@@ -185,5 +185,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
     });
   });
 </script>
+
+ <script type="text/javascript">
+        
+    $(document).ready(function(){
+       $('#form-upload').submit(function(){
+                    
+          $('#spinner').addClass('spinner-border');
+          $("#simpan-btn").css('pointer-events', 'none');
+          $("#kembali-btn").css('pointer-events', 'none');
+
+      });
+
+    });
+
+    
+
+</script>
+
+
 </body>
 </html>
