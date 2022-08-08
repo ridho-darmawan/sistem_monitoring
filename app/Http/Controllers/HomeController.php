@@ -28,7 +28,53 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $aktaCerai = DB::table('sipp.perkara','sipp.perkara_hakim_pn')
+        ->distinct()
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_hakim_pn','sipp.perkara.perkara_id','=','sipp.perkara_hakim_pn.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        ->where('sipp.perkara_hakim_pn.urutan','=',1)
+        ->whereNotNull('sipp.perkara_putusan.tanggal_bht')
+        ->whereNull('sipp.perkara_akta_cerai.nomor_akta_cerai')
+        ->select('sipp.perkara.nomor_perkara','sipp.perkara.tanggal_pendaftaran','sipp.perkara.pihak1_text','sipp.perkara.pihak2_text','sipp.perkara.jenis_perkara_text','sipp.perkara_putusan.tanggal_putusan','sipp.perkara_putusan.tanggal_bht','sipp.perkara_akta_cerai.tgl_akta_cerai','sipp.perkara_hakim_pn.hakim_nama')
+        ->get()->count();
+
+         $monitoringKK = DB::table('sipp.perkara')
+        ->distinct()
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+        ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+        ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+        ->whereNotNull('sipp.perkara_akta_cerai.nomor_akta_cerai')
+        ->whereNotNull('file_kk')
+        ->whereNotNull('no_kk')
+        ->where('sipp.perkara.tanggal_pendaftaran','>=','2022-01-01')
+        ->select('sipp.perkara.nomor_perkara','sipp.perkara.tanggal_pendaftaran','sipp.perkara.pihak1_text','sipp.perkara.pihak2_text','sipp.perkara.jenis_perkara_text','sipp.perkara_putusan.tanggal_putusan','sipp.perkara_putusan.tanggal_bht','sipp.perkara_akta_cerai.tgl_akta_cerai','sipp.perkara_akta_cerai.nomor_urut_akta_cerai','sipp.perkara_akta_cerai.nomor_akta_cerai','sipp.perkara_akta_cerai.no_seri_akta_cerai','sipp.perkara_pihak2.alamat as alamat_termohon','sipp.perkara_pihak1.alamat as alamat_pemohon')        
+        ->orderBy('sipp.perkara_akta_cerai.nomor_urut_akta_cerai','desc')
+        ->get()->count();
+
+         $monitoringPOS = DB::table('sipp.perkara')
+        ->distinct()
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+        ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+        ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+        ->whereNotNull('sipp.perkara_akta_cerai.nomor_akta_cerai')
+        ->whereNotNull('file_kk')
+        ->whereNotNull('no_kk')
+        ->whereNull('resi_pos')
+        ->where('jenis_layanan',2)
+        ->where('sipp.perkara.tanggal_pendaftaran','>=','2022-01-01')
+        ->select('sipp.perkara.nomor_perkara','sipp.perkara.tanggal_pendaftaran','sipp.perkara.pihak1_text','sipp.perkara.pihak2_text','sipp.perkara.jenis_perkara_text','sipp.perkara_putusan.tanggal_putusan','sipp.perkara_putusan.tanggal_bht','sipp.perkara_akta_cerai.tgl_akta_cerai','sipp.perkara_akta_cerai.nomor_urut_akta_cerai','sipp.perkara_akta_cerai.nomor_akta_cerai','sipp.perkara_akta_cerai.no_seri_akta_cerai','sipp.perkara_pihak2.alamat as alamat_termohon','sipp.perkara_pihak1.alamat as alamat_pemohon','permohonan.no_kk')        
+        ->orderBy('sipp.perkara_akta_cerai.nomor_urut_akta_cerai','desc')
+        ->get()->count();
+
+        $totalpermohonanKK = Permohonan::where('jenis_layanan',1)->count();
+        $totalpermohonanKKPOS = Permohonan::where('jenis_layanan',2)->count();
+
+        return view('admin.dashboard', compact('aktaCerai','monitoringKK','monitoringPOS','totalpermohonanKK','totalpermohonanKKPOS'));
     }
 
     public function permohonan()
@@ -442,7 +488,7 @@ class HomeController extends Controller
     public function monitoring_kk()
     {
 
-         $monitoringKK = DB::table('sipp.perkara')
+        $monitoringKK = DB::table('sipp.perkara')
         ->distinct()
         ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
         ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
@@ -458,6 +504,29 @@ class HomeController extends Controller
         ->get();
 
         return view('admin.monitoringKK', compact('monitoringKK'));
+    }
+
+      public function monitoring_pengiriman_pos()
+    {
+
+         $monitoringPOS = DB::table('sipp.perkara')
+        ->distinct()
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+        ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+        ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+        ->whereNotNull('sipp.perkara_akta_cerai.nomor_akta_cerai')
+        ->whereNotNull('file_kk')
+        ->whereNotNull('no_kk')
+        ->whereNull('resi_pos')
+        ->where('jenis_layanan',2)
+        ->where('sipp.perkara.tanggal_pendaftaran','>=','2022-01-01')
+        ->select('sipp.perkara.nomor_perkara','sipp.perkara.tanggal_pendaftaran','sipp.perkara.pihak1_text','sipp.perkara.pihak2_text','sipp.perkara.jenis_perkara_text','sipp.perkara_putusan.tanggal_putusan','sipp.perkara_putusan.tanggal_bht','sipp.perkara_akta_cerai.tgl_akta_cerai','sipp.perkara_akta_cerai.nomor_urut_akta_cerai','sipp.perkara_akta_cerai.nomor_akta_cerai','sipp.perkara_akta_cerai.no_seri_akta_cerai','sipp.perkara_pihak2.alamat as alamat_termohon','sipp.perkara_pihak1.alamat as alamat_pemohon','permohonan.no_kk')        
+        ->orderBy('sipp.perkara_akta_cerai.nomor_urut_akta_cerai','desc')
+        ->get();
+
+        return view('admin.monitoringPengirimanPos', compact('monitoringPOS'));
     }
 
 

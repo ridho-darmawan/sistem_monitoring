@@ -44,5 +44,6 @@ Route::patch('/input_nomor_perkara', 'HomeController@inputNomorPerkara')->name('
 
 Route::get('/monitoring_ac', 'HomeController@monitoring_ac')->name('monitoring_ac');
 Route::get('/monitoring_kk', 'HomeController@monitoring_kk')->name('monitoring_kk');
+Route::get('/monitoring_pengiriman_pos', 'HomeController@monitoring_pengiriman_pos')->name('monitoring_pengiriman_pos');
 
 

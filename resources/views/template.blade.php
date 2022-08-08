@@ -49,12 +49,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <li class="nav-item {{ request()->is('permohonan') ? 'active' : '' }}">
             <a href="{{ route('permohonan') }}" class="nav-link">Permohonan</a>
           </li>
-          <li class="nav-item dropdown {{ request()->is('monitoring_ac') ? 'active' : '' }}">
+          <li class="nav-item dropdown {{ request()->is('monitoring_ac','monitoring_kk','monitoring_pengiriman_pos') ? 'active' : '' }}">
             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Monitoring</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
               <li><a href="{{ route('monitoring_ac') }}" class="dropdown-item">Akta Cerai Belum Keluar</a></li>
               <li><a href="{{ route('monitoring_kk') }}" class="dropdown-item">KK Belum Upload</a></li>
-              <li><a href="#" class="dropdown-item">Data Belum Dikirim Via Pos</a></li>
+              <li><a href="{{ route('monitoring_pengiriman_pos') }}" class="dropdown-item">Data Belum Dikirim Via Pos</a></li>
             
             </ul>
           </li>
