@@ -40,3 +40,8 @@ Route::get('/unduh_surat_kuasa/{id}', 'HomeController@unduh_surat_kuasa')->name(
 
 Route::post('/cekNomorPerkara', 'HomeController@cekNomorPerkara')->name('cekNomorPerkara.post');
 Route::patch('/input_nomor_perkara', 'HomeController@inputNomorPerkara')->name('inputNomorPerkara');
+
+
+Route::get('/monitoring_ac', 'HomeController@monitoring_ac')->name('monitoring_ac');
+
+

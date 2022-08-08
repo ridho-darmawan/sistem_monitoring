@@ -420,6 +420,24 @@ class HomeController extends Controller
 
 
     }
+    public function monitoring_ac()
+    {
+       
+        $aktaCerai = DB::table('sipp.perkara','sipp.perkara_hakim_pn')
+        ->distinct()
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_hakim_pn','sipp.perkara.perkara_id','=','sipp.perkara_hakim_pn.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        ->where('sipp.perkara_hakim_pn.urutan','=',1)
+        ->whereNotNull('sipp.perkara_putusan.tanggal_bht')
+        ->whereNull('sipp.perkara_akta_cerai.nomor_akta_cerai')
+        ->select('sipp.perkara.nomor_perkara','sipp.perkara.tanggal_pendaftaran','sipp.perkara.pihak1_text','sipp.perkara.pihak2_text','sipp.perkara.jenis_perkara_text','sipp.perkara_putusan.tanggal_putusan','sipp.perkara_putusan.tanggal_bht','sipp.perkara_akta_cerai.tgl_akta_cerai','sipp.perkara_hakim_pn.hakim_nama')
+        
+        ->orderBy('sipp.perkara_putusan.tanggal_bht','desc')
+        ->get();
+
+        return view('admin.monitoringAC', compact('aktaCerai'));
+    }
 
 
 }
