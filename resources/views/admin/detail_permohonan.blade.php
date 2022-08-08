@@ -36,11 +36,21 @@
 
                         <div class="card-body">
 
-                            <a href="#tambahNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
-                                <i class="fa fa-plus"></i>
-                                Tambah Nomor Perkara
-                            </a>
-                            @include('admin.modalTambahNomorPerkara')
+                            @if ($permohonan->nomor_perkara_permohonan == null)
+                                <a href="#tambahNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Nomor Perkara
+                                </a>
+                                 @include('admin.modalTambahNomorPerkara')
+                            @else
+                                 <a href="#editNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                    <i class="fa fa-edit"></i>
+                                    Edit Nomor Perkara
+                                </a>
+                            @endif
+
+                           
+                            @include('admin.modalEditNomorPerkara')
                            
                             <table class="table table-bordered table-striped">
                                 <thead>
@@ -53,9 +63,9 @@
                                 </thead>
                                 <tbody>
 
-                                    <td>-</td>
+                                    <td>{{ $permohonan->nomor_perkara_permohonan != null ? $permohonan->nomor_perkara_permohonan : '-'  }}</td>
                                     <td>{{ $permohonan->nama_pemohon }}</td>
-                                    <td>-</td>
+                                    <td>{{ $permohonan->nomor_perkara_permohonan != null ? $permohonan->pihak2_text : '-' }}</td>
                                     <td>{{ $permohonan->jenis_layanan == '1' ? 'Layanan KK' : ' Layanan KK + POS' }}</td>
                                 
                                 </tbody>
@@ -84,31 +94,31 @@
                                                 
                                                     <tr>
                                                         <th width="20%">Tanggal Pendaftaran</th>
-                                                        <td>kl</td>
+                                                        <td>{{ $permohonan->nomor_perkara_permohonan != null ? date('d-M-Y', strtotime($permohonan->tanggal_pendaftaran)) : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Jenis Perkara</th>
-                                                        <td>kl</td>
+                                                        <td>{{ $permohonan->nomor_perkara_permohonan != null ? $permohonan->jenis_perkara_text : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Tanggal Putus</th>
-                                                        <td>kl</td>
+                                                        <td>-</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Akta Cerai</th>
-                                                        <td>kl</td>
+                                                        <td>-</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Kartu Keluarga</th>
-                                                        <td>kl</td>
+                                                        <td>-</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Resi Pos</th>
-                                                        <td>kl</td>
+                                                        <td>-</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor HP Pemohon</th>
-                                                        <td>kl</td>
+                                                        <td>{{ $permohonan->nomor_hp_pemohon }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Pemohon</th>
@@ -122,8 +132,8 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td>{{ $permohonan->nama_pemohon }}</td>
+                                                                        <td>{{ $permohonan->alamat_pemohon }}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -141,8 +151,8 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td>{{ $permohonan->nomor_perkara_permohonan != null ? $termohon->nama : '-' }}</td>
+                                                                        <td>{{ $permohonan->nomor_perkara_permohonan != null ? $termohon->alamat : '-' }}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>

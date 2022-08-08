@@ -33,7 +33,9 @@ class HomeController extends Controller
 
     public function permohonan()
     {
-        $permohonans = Permohonan::orderBy('id_permohonan','desc')->get();
+
+        $permohonans = Permohonan::orderBy('id_permohonan','asc')->get();
+
         return view('admin.permohonan', compact('permohonans'));
     }
 
@@ -80,9 +82,32 @@ class HomeController extends Controller
 
     public function detail_permohonan($id)
     {
+        $getDataPermohonan = Permohonan::findOrFail($id);
+
+        if ($getDataPermohonan->nomor_perkara_permohonan != null) {
+             $permohonan = DB::table('permohonan')
+                ->join('sipp.perkara', 'permohonan.nomor_perkara_permohonan', '=', 'sipp.perkara.nomor_perkara')
+                ->join('sipp.perkara_pihak1', 'sipp.perkara.perkara_id', '=', 'perkara_pihak1.perkara_id')
+                ->where('id_permohonan',$id)
+                ->first();
+
+            $termohon = DB::table('permohonan')
+                ->join('sipp.perkara', 'permohonan.nomor_perkara_permohonan', '=', 'sipp.perkara.nomor_perkara')
+                ->join('sipp.perkara_pihak2', 'sipp.perkara.perkara_id', '=', 'perkara_pihak2.perkara_id')
+                ->where('id_permohonan',$id)
+                ->first();
+        }else{
+            $permohonan = DB::table('permohonan')
+                ->where('id_permohonan',$id)
+                ->first();
+
+            $termohon = DB::table('permohonan')
+                ->where('id_permohonan',$id)
+                ->first();
+        }
         
-        $permohonan = Permohonan::where('id_permohonan',$id)->first();
-        return view('admin.detail_permohonan', ['permohonan' => $permohonan ]);
+           
+        return view('admin.detail_permohonan', ['permohonan' => $permohonan, 'termohon'=>$termohon]);
     }
 
     public function unduh_template_surat_kuasa()
