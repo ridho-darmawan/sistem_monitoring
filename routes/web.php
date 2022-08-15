@@ -15,11 +15,15 @@
 //     return view('welcome');
 // })->name('welcome');
 
-Route::get('/', 'HomeController@telusurPerkara')->name('welcome');
+Route::get('/telusur_perkara', 'HomeController@telusurPerkara')->name('welcome');
 
 Route::get('/admin', function () {
     return view('admin/login');
 })->name('login.admin');
+
+Route::get('/', function () {
+    return view('homepage');
+});
 
 Auth::routes();
 
