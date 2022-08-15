@@ -23,7 +23,7 @@ Route::get('/admin', function () {
 
 Route::get('/', function () {
     return view('homepage');
-});
+})->name('homepage');
 
 Auth::routes();
 

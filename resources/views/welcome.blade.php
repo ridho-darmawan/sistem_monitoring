@@ -50,10 +50,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         @include('sweetalert::alert')
+         
 
         <section class="content mt-4">
+           
             <div class="container-fluid ">
+                    <div class="mb-1 mt-1">
+                        <a href="{{ route('homepage') }}" class="btn btn-warning ">Kembali</a>
+                    </div>
                 <div class="card card-info">
+                   
                     <div class="card-header">
                         <h3 class="card-title">Form Telusur Informasi Perkara</h3>
                     </div>
@@ -351,22 +357,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script  type="text/javascript" src="{{ asset('assets/dist/js/style.js') }}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": true, "autoWidth": false,"paging":false,"searching":false,"ordering": false,
-    });
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
+
 
  <script type="text/javascript">
 
@@ -487,9 +478,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
                     } else {
-                        document.getElementById("detail_perkara").innerHTML='';
-                        document.getElementById("info").innerHTML='<b>*Data untuk Nomor Perkara Tersebut belum tersedia.</b>';
-                        $("#simpan-btn").addClass('d-none');
+
+                         swal({
+                            title: 'Maaf!',
+                            text: "Nomor Perkara daan Nomor Hp tidak sesuai",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6'
+                        })
+                        // document.getElementById("detail_perkara").innerHTML='';
+                        // document.getElementById("info").innerHTML='<b>*Data untuk Nomor Perkara Tersebut belum tersedia.</b>';
+                        // $("#simpan-btn").addClass('d-none');
                     }
 
                     },
