@@ -27,6 +27,7 @@
                     <div class="card card-default">
                         <div class="card-header">
                             <h3 class="card-title">
+                                Hasil Telusur Informasi Perkara
                                 <a href="{{ route('permohonan') }}" class="btn btn-warning d-flex ml-auto">
                                     <i class="fa fa-out"></i>
                                     Kembali

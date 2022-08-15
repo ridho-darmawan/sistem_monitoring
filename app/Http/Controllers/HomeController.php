@@ -16,10 +16,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -75,6 +75,40 @@ class HomeController extends Controller
         $totalpermohonanKKPOS = Permohonan::where('jenis_layanan',2)->count();
 
         return view('admin.dashboard', compact('aktaCerai','monitoringKK','monitoringPOS','totalpermohonanKK','totalpermohonanKKPOS'));
+    }
+
+    public function telusurPerkara(Request $request)
+    {
+
+
+        // $nomorPerkara = $request->nomor;
+        // $tahunPerkara = $request->tahun;
+        // $nomorHp = $request->nomorHp;
+        
+
+        // $perkara = $nomorPerkara.'/Pdt.G/'.$tahunPerkara.'/PA.Tbh';
+        // $dataPerkara = DB::table('permohonan')
+        // ->join('sipp.perkara','permohonan.nomor_perkara_permohonan','=','sipp.perkara.nomor_perkara')
+        // // ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        // // ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        // // ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+        // ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+        // ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+        // //     ->join('sipp.perkara', )
+        //     ->where('nomor_perkara_permohonan',$perkara)
+        //     ->where('nomor_hp_pemohon',$nomorHp)
+        //     ->first();
+
+        // var_dump($dataPerkara);
+
+        // if ($dataPerkara != null) {
+            # code...
+            return view('welcome');
+        // }else{
+            // return view('welcome',['dataPerkara' =>null]);
+
+        // }
+        
     }
 
     public function permohonan()
@@ -188,6 +222,15 @@ class HomeController extends Controller
 
         $filename = $getFileSuratKuasa->surat_kuasa;
         $path = Storage::disk('public')->path('surat_kuasa/'.$filename);
+        return response()->download($path);
+        
+    }
+    public function unduh_kk($id)
+    {
+        $getFileKK = Permohonan::findOrFail($id);
+
+        $filename = $getFileKK->file_kk;
+        $path = Storage::disk('public')->path('kk/'.$filename);
         return response()->download($path);
         
     }
@@ -435,6 +478,68 @@ class HomeController extends Controller
         return response()->json(['success'=>'200', 'data' => $dataPerkara]);
                
     }
+
+    public function cekPerkaraPemohon(Request $request)
+    {
+        
+        $nomorPerkara = $request->nomorPerkara;
+        $nomorHp = $request->nomorHp;
+
+        $permohonan = DB::table('permohonan')
+                ->join('sipp.perkara', 'permohonan.nomor_perkara_permohonan', '=', 'sipp.perkara.nomor_perkara')
+                ->join('sipp.perkara_pihak1', 'sipp.perkara.perkara_id', '=', 'perkara_pihak1.perkara_id')
+                ->where('nomor_perkara_permohonan',$nomorPerkara)
+                ->where('nomor_hp_pemohon',$nomorHp)
+                ->first();
+
+            $termohon = DB::table('permohonan')
+                ->join('sipp.perkara', 'permohonan.nomor_perkara_permohonan', '=', 'sipp.perkara.nomor_perkara')
+                ->join('sipp.perkara_pihak2', 'sipp.perkara.perkara_id', '=', 'perkara_pihak2.perkara_id')
+                ->where('nomor_perkara_permohonan',$nomorPerkara)
+                ->where('nomor_hp_pemohon',$nomorHp)
+                ->first();
+
+        $dataPerkara = DB::table('permohonan')
+        ->join('sipp.perkara','permohonan.nomor_perkara_permohonan','=','sipp.perkara.nomor_perkara')
+        ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+        ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+        // ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+        ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+        ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+        //     ->join('sipp.perkara', )
+            ->where('nomor_perkara_permohonan',$nomorPerkara)
+            ->where('nomor_hp_pemohon',$nomorHp)
+            ->first();
+
+            // var_dump($dataPerkara);
+
+        return response()->json(['success'=>'200', 'data' => $dataPerkara, 'pemohon'=>$permohonan, 'termohon'=>$termohon]);
+               
+    }
+    // public function getPerkaraPemohon(Request $request)
+    // {
+        
+    //     $nomorPerkara = $request->nomor .'/Pdt.G/'. $request->tahun .'/PA.Tbh';
+    //     $nomorHp = $request->nomor_hp_terdaftar;
+    //     $dataPerkara = DB::table('permohonan')
+    //     ->join('sipp.perkara','permohonan.nomor_perkara_permohonan','=','sipp.perkara.nomor_perkara')
+    //     // ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+    //     // ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
+    //     // ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
+    //     // ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
+    //     // ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
+    //     //     ->join('sipp.perkara', )
+    //         ->where('nomor_perkara_permohonan',$nomorPerkara)
+    //         ->where('nomor_hp_pemohon',$nomorHp)
+    //         ->first();
+
+    //         // var_dump($dataPerkara);
+
+    //         return view('welcome', $dataPerkara);
+
+    //     // return response()->json(['success'=>'200', 'data' => $dataPerkara]);
+               
+    // }
 
     public function inputNomorPerkara(Request $request)
     {

@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('welcome');
+
+Route::get('/', 'HomeController@telusurPerkara')->name('welcome');
 
 Route::get('/admin', function () {
     return view('admin/login');
@@ -37,6 +39,7 @@ Route::patch('/upload_kk', 'HomeController@upload_kk')->name('upload.kk');
 Route::patch('/edit_kk', 'HomeController@edit_kk')->name('edit.kk');
 Route::get('/unduh_surat_pernyataan/{id}', 'HomeController@unduh_surat_pernyataan')->name('unduhSuratPernyataan');
 Route::get('/unduh_surat_kuasa/{id}', 'HomeController@unduh_surat_kuasa')->name('unduhSuratKuasa');
+Route::get('/unduh_kk/{id}', 'HomeController@unduh_kk')->name('unduhKK');
 
 Route::post('/cekNomorPerkara', 'HomeController@cekNomorPerkara')->name('cekNomorPerkara.post');
 Route::patch('/input_nomor_perkara', 'HomeController@inputNomorPerkara')->name('inputNomorPerkara');
@@ -45,5 +48,9 @@ Route::patch('/input_nomor_perkara', 'HomeController@inputNomorPerkara')->name('
 Route::get('/monitoring_ac', 'HomeController@monitoring_ac')->name('monitoring_ac');
 Route::get('/monitoring_kk', 'HomeController@monitoring_kk')->name('monitoring_kk');
 Route::get('/monitoring_pengiriman_pos', 'HomeController@monitoring_pengiriman_pos')->name('monitoring_pengiriman_pos');
+
+
+Route::post('/cekPerkaraPemohon', 'HomeController@cekPerkaraPemohon')->name('cekPerkaraPemohon.post');
+Route::get('/getPerkaraPemohon', 'HomeController@getPerkaraPemohon')->name('getPerkaraPemohon.get');
 
 
