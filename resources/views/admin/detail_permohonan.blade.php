@@ -23,15 +23,18 @@
             <div class="row">
             <!-- left column -->
                 <div class="col-12">
-                    <!-- general form elements -->
-                    <div class="card card-default">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Hasil Telusur Informasi Perkara
-                                <a href="{{ route('permohonan') }}" class="btn btn-warning d-flex ml-auto">
+                     <a href="{{ route('permohonan') }}" class="btn btn-warning mb-2">
                                     <i class="fa fa-out"></i>
                                     Kembali
                                 </a>
+                    <!-- general form elements -->
+                    <div class="card card-default">
+                        
+                        <div class="card-header">
+                            <h3 class="card-title">
+                               
+                                Hasil Telusur Informasi Perkara
+                                
                             </h3>
                         </div>
 
@@ -44,14 +47,34 @@
                                 </a>
                                  @include('admin.modalTambahNomorPerkara')
                             @else
-                                 <a href="#editNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                <a href="#editNomorPerkara" class="btn btn-default mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
                                     <i class="fa fa-edit"></i>
                                     Edit Nomor Perkara
                                 </a>
+                                 @include('admin.modalEditNomorPerkara')
+                            @endif
+
+                            @if ($permohonan->tanggal_putusan != null & $permohonan->file_kk != null & $permohonan->resi_pos == null)
+                                <a href="#inputResiPos" class="btn btn-success mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                    <i class="fa fa-edit"></i>
+                                    Input No Resi POS
+                                </a>
+                                 @include('admin.modalInputNoResi')
+
+                            @elseif($permohonan->tanggal_putusan != null & $permohonan->file_kk != null & $permohonan->resi_pos != null)
+                                 <a href="#editResiPos" class="btn btn-success mb-4" data-toggle="modal"  data-keyboard="false" data-backdrop="static">
+                                    <i class="fa fa-edit"></i>
+                                    Edit No Resi POS
+                                </a>
+                                 @include('admin.modalEditNoResi')
                             @endif
 
                            
-                            @include('admin.modalEditNomorPerkara')
+
+                            
+
+                           
+                           
                            
                             <table class="table table-bordered table-striped">
                                 <thead>
@@ -103,19 +126,19 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Tanggal Putus</th>
-                                                        <td>-</td>
+                                                        <td>{{ $permohonan->tanggal_putusan != null ? date('d-M-Y', strtotime($permohonan->tanggal_putusan)) : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Akta Cerai</th>
-                                                        <td>-</td>
+                                                        <td>{{ $permohonan->nomor_akta_cerai != null ? $permohonan->nomor_akta_cerai : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Kartu Keluarga</th>
-                                                        <td>-</td>
+                                                        <td>{{ $permohonan->no_kk != null ? $permohonan->no_kk : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor Resi Pos</th>
-                                                        <td>-</td>
+                                                        <td>{{ $permohonan->resi_pos != null ? $permohonan->resi_pos : '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Nomor HP Pemohon</th>

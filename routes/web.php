@@ -47,6 +47,7 @@ Route::get('/unduh_kk/{id}', 'HomeController@unduh_kk')->name('unduhKK');
 
 Route::post('/cekNomorPerkara', 'HomeController@cekNomorPerkara')->name('cekNomorPerkara.post');
 Route::patch('/input_nomor_perkara', 'HomeController@inputNomorPerkara')->name('inputNomorPerkara');
+Route::patch('/input_nomor_resi', 'HomeController@inputNomorResi')->name('inputNomorResi');
 
 
 Route::get('/monitoring_ac', 'HomeController@monitoring_ac')->name('monitoring_ac');

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+// use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -168,6 +169,8 @@ class HomeController extends Controller
              $permohonan = DB::table('permohonan')
                 ->join('sipp.perkara', 'permohonan.nomor_perkara_permohonan', '=', 'sipp.perkara.nomor_perkara')
                 ->join('sipp.perkara_pihak1', 'sipp.perkara.perkara_id', '=', 'perkara_pihak1.perkara_id')
+                ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
+                ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
                 ->where('id_permohonan',$id)
                 ->first();
 
@@ -410,6 +413,7 @@ class HomeController extends Controller
         $this->validate($request, $rules, $messages);
 
         $kk = $request->file('kk');
+        $no_kk = $request->no_kk;
 
         $name_kk = date('YmdHis').'.'.$kk->getClientOriginalExtension();
         
@@ -418,6 +422,7 @@ class HomeController extends Controller
 
         $input = [
             'file_kk'          => $name_kk,
+            'no_kk'            => $no_kk
         ];
 
         $saveKK = $getDataPermohonan->update($input);
@@ -431,6 +436,7 @@ class HomeController extends Controller
 
     public function edit_kk(Request $request)
     {   
+
         $getDataPermohonan = Permohonan::where('id_permohonan', $request->id_permohonan)->first();
 
         $fileKKLama =storage_path('app/public/kk/'.$getDataPermohonan->file_kk);
@@ -448,6 +454,7 @@ class HomeController extends Controller
         $this->validate($request, $rules, $messages);
 
         $kk = $request->file('kk');
+        $no_kk = $request->no_kk;
 
         $name_kk = date('YmdHis').'.'.$kk->getClientOriginalExtension();
         
@@ -455,6 +462,7 @@ class HomeController extends Controller
 
         $input = [
             'file_kk'          => $name_kk,
+            'no_kk'          => $no_kk,
         ];
 
         $saveKK = $getDataPermohonan->update($input);
@@ -516,30 +524,7 @@ class HomeController extends Controller
         return response()->json(['success'=>'200', 'data' => $dataPerkara, 'pemohon'=>$permohonan, 'termohon'=>$termohon]);
                
     }
-    // public function getPerkaraPemohon(Request $request)
-    // {
-        
-    //     $nomorPerkara = $request->nomor .'/Pdt.G/'. $request->tahun .'/PA.Tbh';
-    //     $nomorHp = $request->nomor_hp_terdaftar;
-    //     $dataPerkara = DB::table('permohonan')
-    //     ->join('sipp.perkara','permohonan.nomor_perkara_permohonan','=','sipp.perkara.nomor_perkara')
-    //     // ->join('sipp.perkara_putusan','sipp.perkara.perkara_id','=','sipp.perkara_putusan.perkara_id')
-    //     // ->join('sipp.perkara_akta_cerai','sipp.perkara.perkara_id','=','sipp.perkara_akta_cerai.perkara_id')
-    //     // ->join('permohonan','sipp.perkara.nomor_perkara','=','permohonan.nomor_perkara_permohonan')
-    //     // ->join('sipp.perkara_pihak2','sipp.perkara.perkara_id','=','sipp.perkara_pihak2.perkara_id')
-    //     // ->join('sipp.perkara_pihak1','sipp.perkara.perkara_id','=','sipp.perkara_pihak1.perkara_id')
-    //     //     ->join('sipp.perkara', )
-    //         ->where('nomor_perkara_permohonan',$nomorPerkara)
-    //         ->where('nomor_hp_pemohon',$nomorHp)
-    //         ->first();
-
-    //         // var_dump($dataPerkara);
-
-    //         return view('welcome', $dataPerkara);
-
-    //     // return response()->json(['success'=>'200', 'data' => $dataPerkara]);
-               
-    // }
+   
 
     public function inputNomorPerkara(Request $request)
     {
@@ -571,6 +556,70 @@ class HomeController extends Controller
 
 
     }
+
+    function callAPI($method, $url, $data){
+        $curl = curl_init();
+        switch ($method){
+            case "POST":
+                curl_setopt($curl, CURLOPT_POST, 1);
+                if ($data)
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            case "PUT":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                if ($data)
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);			 					
+                break;
+            default:
+                if ($data)
+                    $url = sprintf("%s?%s", $url, http_build_query($data));
+        }
+        // OPTIONS:
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'APIKEY: 111111111111111111111',
+            'Content-Type: application/json',
+        ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        // EXECUTE:
+        $result = curl_exec($curl);
+        if(!$result){die("Connection Failure");}
+        curl_close($curl);
+        return $result;
+    }
+
+    public function inputNomorResi(Request $request)
+    {
+        
+        $getDataPermohonan = Permohonan::findOrFail($request->id_permohonan);
+        $getNoHpPemohon =  $getDataPermohonan->nomor_hp_pemohon;
+        $pesan = "*[Informasi]* \r\nAssalamulaikum Wr Wb. \r\nDokumen anda telah dikirim ke alamat terdaftar melalui POS dengan Nomor Resi *".$request->no_resi.".* Dikirim otomatis PA.Tembilahan";
+        
+        $input = [
+            'resi_pos' => $request->no_resi
+        ];
+
+        $saveNomorResi = $getDataPermohonan->update($input);
+
+        if($saveNomorResi)
+        {
+
+            $data_array =  array(
+                'number' => $getNoHpPemohon,
+                'message' => $pesan,
+            );
+            $make_call = $this->callAPI('POST', 'http://192.168.77.232:8000/send-message/', json_encode($data_array));
+            $response = json_decode($make_call, true);
+           
+
+            Alert::success('Berhasil', 'Input Nomor Resi POS')->persistent('OK')->autoClose(3000);
+            return redirect()->route('permohonan');
+        }
+
+
+    }
+
     public function monitoring_ac()
     {
        

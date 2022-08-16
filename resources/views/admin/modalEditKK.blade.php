@@ -21,6 +21,17 @@
                             <td class="text-center">{{ $permohonan->file_kk }}</td>
                             
                         </tr>
+
+                        <tr style="background-color: rgb(145, 207, 104); ">
+                            <td class="text-center text-white">Nomor Kartu keluarga Baru</td>  
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <input type="text" name="no_kk" class="form-control" value="{{ $permohonan->no_kk }}">
+                                
+                            </td>
+                        </tr>
                         
                         <tr style="background-color: rgb(145, 207, 104); ">
                             <td class="text-center text-white">Unggah E-doc Kartu Keluarga</td>  
@@ -29,7 +40,7 @@
                         <tr>
                             <input type="hidden" name="id_permohonan" value="{{ $permohonan->id_permohonan }}">
                             <td>
-                                <input type="file" name="kk" id="kk" >
+                                <input type="file" name="kk" id="kk" value="{{ $permohonan->file_kk }}">
                                 <div class="text-center">
                                     <div  id="spinner" role="status">
                                         <span class="sr-only">Loading...</span>
